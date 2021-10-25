@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+import * as JSZip from 'jszip';
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -13,10 +15,23 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('zipper.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Zipper!');
+	let disposable = vscode.commands.registerCommand('zipper.makeArchive', () => {
+		const workspaceFolders = vscode.workspace.workspaceFolders;
+		if (!workspaceFolders) {
+			console.log("No workspace!");
+			return;
+		}
+
+		const zip = new JSZip();
+		zip.file("robot.py", "print('Hello World')\n");
+
+		const root = workspaceFolders[0].uri;
+		const archiveUri = vscode.Uri.joinPath(root, "robot.zip");
+		zip.generateAsync({ type: "uint8array" }).then(content => {
+			vscode.workspace.fs.writeFile(archiveUri, content);
+		});
+
+		console.log("Archive written");
 	});
 
 	context.subscriptions.push(disposable);

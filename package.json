@@ -1,5 +1,6 @@
 {
 	"name": "zipper",
+	"publisher": "PeterJCLaw",
 	"displayName": "Zipper",
 	"description": "Zip things",
 	"version": "0.0.1",
@@ -10,14 +11,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:zipper.helloWorld"
+		"onCommand:zipper.makeArchive"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "zipper.helloWorld",
-				"title": "Hello World"
+				"command": "zipper.makeArchive",
+				"title": "Create Archive"
 			}
 		]
 	},
